@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>План развертывания сайта.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B2%D0%B5%D0%B1-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BD%D0%B0-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80-python-flask-gunicorn-nginx">Установка веб-приложения на сервер  (Python-Flask-Gunicorn-Nginx)</h1>
+<p>Использование современных фреймворков таких как <strong><a href="https://flask.palletsprojects.com/en/2.2.x/">Flask</a></strong> или <strong><a href="https://www.djangoproject.com/">Django</a></strong> позволяют достаточно просто организовать разработку веб-приложения на языке <strong><a href="https://www.python.org/">Python</a></strong>, используя при этом для тестирования локальные серверы. Такого рода программные серверы, как правило устанавливаются при установке самих фреймворков и их использование не вызывает ни каких затруднений. Однако использование данных серверов для разворачивании приложения не допустимо, т.к. не позволяет обеспечить достаточный уровень безопасности приложения при его использовании.</p>
+<p>В данной ситуации потребуется развертывание приложения на web сервере. В качестве такого сервера может быть использован как собственный сервер вашей компании или ваш домашний сервер, как и виртуальный или облачный сервер. Главным условием выбора сервера является наличие у него статического IP адреса.</p>
+<p>В данной публикации будет рассмотрен вариант развертывания web приложения на виртуальной машине с установленной операционной системой <strong><code>Linux Debian 11</code></strong> с применением серверов <strong><a href="https://gunicorn.org/">Gunicorn</a></strong> и <strong><a href="https://nginx.org/ru/">Nginx</a></strong></p>
+<p>Полный порядок подключения можно найти <strong><a href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">здесь</a></strong></p>
+<hr>
+<h2 id="%D0%B1%D0%B0%D0%B7%D0%BE%D0%B2%D0%B0%D1%8F-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0">Базовая установка и настройка веб-сервера</h2>
+<p>Перед началом разработки приложения (если разработку планируется вести прямо на сервере) или публикации на сервере уже написанного приложения требуется выполнить некоторые подготовительные действия.</p>
+<h2 id="1-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%B5%D0%BC-%D0%B8%D0%BD%D1%84%D1%80%D0%B0%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%83-%D0%BF%D0%B0%D0%BF%D0%BE%D0%BA-%D0%B2-%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D1%85-%D0%B1%D1%83%D0%B4%D1%83%D1%82-%D0%BD%D0%B0%D1%85%D0%BE%D0%B4%D0%B8%D1%82%D1%8C%D1%81%D1%8F-%D0%B2%D1%81%D0%B5-%D1%84%D0%B0%D0%B9%D0%BB%D1%8B-%D0%BD%D0%B0%D1%88%D0%B5%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F">1. Создаем инфраструктуру папок, в которых будут находиться все файлы нашего приложения.</h2>
+<p>В нашем случае будет всего одна корневая директория, размещаемая в одной из директорий созданных в корне жесткого диска.</p>
+<pre class="hljs"><code><div>  $ sudo mkdir /path/to/folder/my_site
+</div></code></pre>
+<h2 id="2-%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%BB%D0%B0%D0%B4%D0%B5%D0%BB%D1%8C%D1%86%D0%B0-%D0%BF%D0%B0%D0%BF%D0%BA%D0%B8-%D0%B8-%D0%BF%D1%80%D0%B0%D0%B2-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-%D0%BA-%D0%BD%D0%B5%D0%B9">2. Изменение владельца папки и прав доступа к ней</h2>
+<pre class="hljs"><code><div>  $ sudo chown user:group /path/to/folder/my_site
+</div></code></pre>
+<h2 id="3-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BE%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F">3. Создание виртуального окружения.</h2>
+<p>Виртуальное окружение в Python — способ изолировать зависимости (пакеты) для определённого проекта.
+Создаётся через модуль <code>venv</code>, который идёт в поставке <code>Python 3</code>.</p>
+<p>Используется команда <strong><code>python −m venv</code></strong> и название директории, в которой будет создано виртуальное окружение.</p>
+<pre class="hljs"><code><div>  <span class="hljs-built_in">cd</span> /path/to/folder/my_site
+  python3 -m venv venv
+</div></code></pre>
+<p>Флаг <code>-m</code> указывает Python-у запустить <strong><code>venv</code></strong> как исполняемый модуль.
+<strong><code>venv/</code></strong> — название виртуального окружения (где будут храниться ваши библиотеки).</p>
+<p>В результате будет создан каталог <strong><code>venv/</code></strong> содержащий копию интерпретатора Python, стандартную библиотеку и другие вспомогательные файлы.</p>
+<h2 id="4-%D0%B0%D0%BA%D1%82%D0%B8%D0%B2%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE-%D0%BE%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F">4. Активация виртуального окружения</h2>
+<pre class="hljs"><code><div>  $ <span class="hljs-built_in">source</span> /venv/bin/activate
+</div></code></pre>
+<h2 id="5-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B5%D0%B9">5. Установка зависимостей</h2>
+<p>Для обеспечения процесса разработки веб-приложения установим следующие программные пакеты - <strong><code>flask, gunicorn, wheel, sqlite3 libsqlite3-dev</code></strong>. Установку сервера <strong><code>Nginx</code></strong> выполним чуть позднее.</p>
+<p>Два последних будут использоваться для обеспечения работы из консоли с базой данных <strong><code>sqlite3</code></strong> в интерактивном режиме при отсутствии графической оболочки на сервере. Т.е. позволят пр необходимости вносить изменения в используемую базу данных.</p>
+<pre class="hljs"><code><div>  (venv)$ pip install flask gunicorn wheel sqlite3 libsqlite3-dev
+</div></code></pre>
+<blockquote>
+<p>Собственно далее должен выполняться процесс разработки приложения или размещения уже готового приложения в созданной нами директории. Данный процесс по понятным причинам опустим и перейдем сразу к настройке WSGI севера приложений</p>
+</blockquote>
+<h2 id="6-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%B5%D0%BC-%D1%82%D0%BE%D1%87%D0%BA%D1%83-%D0%B2%D1%85%D0%BE%D0%B4%D0%B0-%D0%B2-%D0%BF%D1%80%D0%B8%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B4%D0%BB%D1%8F-gunicorn">6. Создаем точку входа в приложение для <code>gunicorn</code></h2>
+<pre class="hljs"><code><div>  (venv)$  nano /opt/my_project/wsgi.py
+</div></code></pre>
+<p>В созданный файл записываем следующий код:</p>
+<pre class="hljs"><code><div>  <span class="hljs-keyword">from</span> app <span class="hljs-keyword">import</span> app
+
+  <span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">"__main__"</span>:
+      app.run()
+</div></code></pre>
+<h2 id="7-%D0%BF%D0%B5%D1%80%D0%B2%D1%8B%D0%B9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-gunicorn">7. Первый запуск <code>gunicorn</code></h2>
+<blockquote>
+<p>В нашем проекте мы будем использовать привязку к ip <code>0.0.0.0</code> и порту <code>8080</code></p>
+</blockquote>
+<pre class="hljs"><code><div>(venv)$ gunicorn --<span class="hljs-built_in">bind</span> 0.0.0.0:8080 wsgi:app
+</div></code></pre>
+<blockquote>
+<p>Если все было выполнено правильно, то можно будет увидеть подобный вывод на экране терминала:</p>
+</blockquote>
+<pre class="hljs"><code><div>    [2021-11-19 23:07:57 +0000] [8760] [INFO] Starting gunicorn 20.1.0
+    [2021-11-19 23:07:57 +0000] [8760] [INFO] Listening at: http://0.0.0.0:5000 (8760)
+    [2021-11-19 23:07:57 +0000] [8760] [INFO] Using worker: sync
+    [2021-11-19 23:07:57 +0000] [8763] [INFO] Booting worker with pid: 8763
+</div></code></pre>
+<p>Останавливаем <code>gunicorn</code>  нажав <kbd>Ctrl</kbd> + <kbd>C</kbd> и создаем для него службу</p>
+<h2 id="8-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D1%81%D0%BB%D1%83%D0%B6%D0%B1%D1%8B">8. Создание службы</h2>
+<blockquote>
+<p>Для постоянной работы сервер wsgi будет запускаться и работать на уровне службы</p>
+</blockquote>
+<pre class="hljs"><code><div>$ sudo nano /etc/systemd/system/my_site.service
+</div></code></pre>
+<h2 id="9-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-%D1%81%D0%BB%D1%83%D0%B6%D0%B1%D1%8B">9. Запуск службы</h2>
+<pre class="hljs"><code><div>$ sudo systemctl start my_site
+</div></code></pre>
+<h2 id="10-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-gunicorn">10. Конфигурирование Gunicorn</h2>
+<pre class="hljs"><code><div>
+</div></code></pre>
+<h2 id="10-%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B8-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA-%D0%B4%D0%B5%D0%BC%D0%BE%D0%BD%D0%B0">10. Создание и запуск демона</h2>
+<pre class="hljs"><code><div>$ sudo systemctl <span class="hljs-built_in">enable</span> my_site
+</div></code></pre>
+<details>
+    <summary>Продолжение</summary>
+    В следующем подкасте будет детально рассмотрена установка и настройка сервера <b>Nginx</b> для работы в качестве прокси-сервера для Gunicorn
+</details>
+<h2 id="11-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-nginx">11. Установка сервера <code>Nginx</code></h2>
+<h2 id="12-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-nginx-gunicorn">12. Настройка проксирования <code>Nginx-Gunicorn</code></h2>
+<blockquote>
+<p>Дальнейший текс приведен только для проверки использования <i><b>html</b></i> разметки внутри маркдаун</p>
+</blockquote>
+<ul style="color: #fcba03">
+  <li >Пункт 1</li>
+  <li>Пункт 2</li>
+  <li style="color: #03fc9d">Пункт 3</li>
+  <li>Пункт 4</li>
+  <li>Cписок второго уровня</li>
+  <dl style="color: #597d96">
+    <li>Подпункт 1</li>
+    <li>Подпункт 2</li>
+    <li>Подпункт 3</li>
+  </dl>
+  <li>Пункт 3</li>
+  <li>Пункт 4</li>
+</ul>
+<p align="center" style="color: red"> Текст с <sup>[верхним] </sup>индексом работает только с html тегами </p>
+<p><spoiler title="Для любознательных" style="color: #967559">Информация для любознательных</spoiler></p>
+<div align="center" style="margin: 50px">
+<iframe width="800" height="600" src="https://www.youtube.com/embed/jPKi2Addbxw" title="Markdown - что за язык и как им пользоваться" frameborder="5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+<blockquote>
+<h2 id="%D1%8D%D1%82%D0%B8-%D1%80%D0%BE%D0%BB%D0%B8%D0%BA%D0%B8-%D0%B1%D1%83%D0%B4%D1%83%D1%82-%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D1%8B-bdo%D0%BC%D0%B5%D0%B6%D0%B4%D1%83bdo-%D1%81%D0%BE%D0%B1%D0%BE%D0%B9-%D1%81%D1%82%D1%80%D0%BE%D1%87%D0%BA%D0%BE%D0%B9-%D0%B2-%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%83%D1%8E-%D0%BC%D0%BE%D0%B6%D0%BD%D0%BE-%D0%B2%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D1%86%D0%B8%D1%82%D0%B0%D1%82%D1%83-%D0%B8%D0%BB%D0%B8-%D0%BA%D0%BE%D0%BC%D0%BC%D0%B5%D0%BD%D1%82%D0%B0%D1%80%D0%B8%D0%B9">Эти ролики будут разделены <bdo>между</bdo> собой строчкой в которую можно вставить цитату или комментарий.</h2>
+</blockquote>
+<div align="center" style="margin: 50px">
+<iframe width="800" height="600" src="https://www.youtube.com/embed/DojzT2P3ObU" title="Встречайте новый российский атомный суперавианосец, получивший название проекта 23000Э-Шторм" frameborder="5" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
+
+</body>
+</html>

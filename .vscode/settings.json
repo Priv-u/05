@@ -1,0 +1,13 @@
+{
+    "python.analysis.typeCheckingMode": "off",
+    "cSpell.words": [
+        "ЛГБТ",
+        "хостера",
+        "appcontext",
+        "Gunicorn",
+        "remainme",
+        "wsgi"
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
+}

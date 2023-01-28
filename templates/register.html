@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{ super() }}
+{% for cat, msg in get_flashed_messages(True) %}
+<div class='flash {{ cat }}'>{{msg}}</div>
+{% endfor %}
+<form class='form-contact' action='/register' method='post'>
+    <!-- <hr align=left width='350px'> -->
+    <div class='form-register'>
+        <div>
+            <label class='u_name_lb'>Имя пользователя:</label>
+        </div>
+        <div>
+            <input class='u_name_val' type='text' name='name' value='' required />
+        </div>
+        <div>
+            <label class='u_email_lb'>Email пользователя:</label>
+        </div>
+        <div>
+            <input class='u_email_val' type='text' name='email' value='' required />
+        </div>
+        <div>
+            <label class='u_pas1_lb'>Введите пароль:</label>
+        </div>
+        <div>
+            <input class='u_pas1_val' type='password' name='psw' value='' required />
+        </div>
+        <div>
+            <label class='u_pas2_lb'>Повторите пароль:</label>
+        </div>
+        <div>
+            <input class='u_pas2_val' type='password' name='psw2' value='' required />
+        </div>
+        <p><input class='u_submit' type='submit' value='Регистрация' />
+    </div>
+
+</form>
+{% endblock %}

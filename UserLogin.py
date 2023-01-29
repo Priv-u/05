@@ -38,3 +38,10 @@ class UserLogin(UserMixin):
         else:
             img = self.__user['avatar']
         return img
+
+    def verify_ext(self, filename):
+        '''Метод проверяет расширение выбранного файла и если оно png то возвращает True'''
+        f_ext = filename.rsplit('.', 1)[1]
+        if f_ext == "png" or f_ext == "PNG":
+            return True
+        return False

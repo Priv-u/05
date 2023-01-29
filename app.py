@@ -1,7 +1,8 @@
 '''Главный модуль приложения
 '''
-# TODO улучшение авторизации https://youtu.be/L_o0wRaZJdg?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
-#TODO Загрузка файла на сервер и сохранение его в БД https://www.youtube.com/watch?v=ICKN_R0wGiI&list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn&index=17&ab_channel=selfedu
+#улучшение авторизации https://youtu.be/L_o0wRaZJdg?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
+#Загрузка файла на сервер и сохранение его в БД https://www.youtube.com/watch?v=ICKN_R0wGiI&list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn&index=17&ab_channel=selfedu
+#TODO Применение WTForms для работы с формами сайта https://youtu.be/oba6GGprvKc?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
 import sqlite3
 import os
 from flask import Flask, render_template, url_for, request,\
@@ -164,6 +165,28 @@ def userava():
     h = make_response(img)
     h.headers['Content-Type'] = 'image/png'
     return h
+
+
+@app.route('/apload', methods=["POST", "GET"])
+@login_required
+def upload():
+    '''Функция выполняет загрузку аватара в БД для текущего пользователя'''
+    if request.method == 'POST':
+        file = request.files['file']
+        # TODO Дописать метод update_user_avatar
+        if file and current_user.verify_ext(file.filename):
+            try:
+                img = file.read()
+                res = d_base.update_user_avatar(img, current_user.get_id())
+                if not res:
+                    flash('Ошибка обновления аватара', 'error')
+                flash('Аватар обновлен', 'success')
+            except FileNotFoundError as error:
+                flash('Ошибка чтения файла', 'error')
+                print(f"Ошибка чтения файла: {error}")
+        else:
+            flash('Ошибка обновления аватара', 'error')
+    return redirect(url_for('profile'))
 
 
 @app.errorhandler(404)

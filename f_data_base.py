@@ -107,6 +107,7 @@ class FDataBase:
         return False
 
     def get_user_by_email(self, email):
+        '''Проверяет пользователя по наличию указанного email в базе данных'''
         try:
             self.__cur.execute(f"SELECT * FROM users WHERE email = '{email}' LIMIT 1")
             res = self.__cur.fetchone()
@@ -117,3 +118,17 @@ class FDataBase:
         except sqlite3.Error as sql_error:
             print("Ошибка получения данных из БД" + str(sql_error))
         return False
+
+    def update_user_avatar(self, avatar, user_id):
+        '''Метод добавляет аватар пользователя в базу данных'''
+        if not avatar:
+            return False
+        try:
+            binary = sqlite3.Binary(avatar)
+            # self.__cur.execute(f"UPDATE users SET avatar = {binary} WHERE id = {user_id}")
+            self.__cur.execute(f"UPDATE users SET avatar = ? WHERE id = ?", (binary, user_id))
+            self.__db.commit()
+        except sqlite3.Error as sql_error:
+            print(f"Ошибка обновления аватара пользователя в БД: {sql_error}")
+            return False
+        return True

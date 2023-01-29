@@ -178,16 +178,18 @@ ul.list-posts .anonce {
 }
 
 .profile-ava {
-    width: 130px;
+    width: 135px;
     text-align: center;
     overflow: hidden;
-    background: #eee;
+    /* background: #eee; */
     padding: 10px;
 }
 
 .profile-ava img {
-    max-width: 150px;
+    max-width: 130px;
     height: auto;
+    border: 5px solid #2c6a7e;
+    border-radius: 30px;
 }
 
 .profile-load {

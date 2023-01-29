@@ -7,7 +7,7 @@ from flask import Flask, render_template, url_for, request,\
                     flash, redirect, session, abort, g
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import config #Импортируем настройки из отдельного файла
+import config # Импортируем настройки из отдельного файла
 from f_data_base import FDataBase
 from UserLogin import UserLogin
 
@@ -54,6 +54,8 @@ def get_db():
 
 
 d_base = None
+
+
 @app.before_request
 def before_request():
     '''Устанавливаем соединение с БД перед выполнением запроса'''
@@ -74,8 +76,8 @@ def index():
     '''Обработчик главной страницы'''
     return render_template('index.html', menu=d_base.get_menu(), posts = d_base.get_post_anons())
 
-
 @app.route('/add_post', methods=['POST', 'GET'])
+@login_required
 def add_post():
     '''Обработчик добавления новой статьи в базу данных'''
     if request.method == 'POST':
@@ -100,29 +102,10 @@ def show_post(alias):
     return render_template('post.html', menu=d_base.get_menu(), title=title, post=post)
 
 
-# @app.route('/about')
-# def about():
-#     '''Обработчик страницы О сайте'''
-#     print(url_for('about'))
-#     title = 'О сайте'
-#     return render_template('about.html', title=title, menu=menu)
-
-
-# @app.route('/contact', methods=['POST','GET'])
-# def contact():
-#     '''Обработчик страницы Обратная связь'''
-#     if request.method == 'POST':
-#         # print(request.form['username'])
-#         if len(request.form['username']) > 2:
-#             flash('Сообщение отправлено', category='success')
-#         else:
-#             flash('Ошибка отправки сообщения', category='error')
-#     return render_template('contact.html', title='Обратная связь', menu=menu)
-
-
 @app.route('/logout')
 @login_required
 def logout():
+    '''Обработчик обеспечивает выход из аккаунта для авторизованного пользователя'''
     logout_user()
     flash("Вы вышли из аккаунта", "success")
     return redirect(url_for('login'))
@@ -132,19 +115,21 @@ def logout():
 def profile():
     '''Обработчик для страницы профайла пользователя'''
     return f"""<h2><a href="{url_for('logout')}">Выйти из профиля</a></h2>
-            <p>user info: {current_user.get_id()}</p>"""
+            <p>Информация о пользователе. ID:{current_user.get_id()}</p>"""
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     '''Обработчик формы Логин'''
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
     if request.method == "POST":
         user = d_base.get_user_by_email(request.form['email'])
         if user and check_password_hash(user['psw'], request.form['psw']):
             user_login = UserLogin().create(user)
             remember_me = True if request.form.get('remainme') else False
             login_user(user_login, remember = remember_me)
-            return redirect(url_for('profile'))
+            return redirect(request.args.get('next') or url_for('profile'))
         flash("Неверная пара логин/пароль", "error")
     return render_template('login.html', title='Авторизация', menu=d_base.get_menu())
 

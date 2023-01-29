@@ -85,7 +85,7 @@ class FDataBase:
                 print("Пользователь с таким email уже существует")
                 return False
             add_user_time = math.floor(time.time())
-            self.__cur.execute("INSERT INTO users VALUES (NULL, ?, ?, ?, ?)",
+            self.__cur.execute("INSERT INTO users VALUES (NULL, ?, ?, ?, NULL, ?)",
                                                 (name, email, psw, add_user_time))
             self.__db.commit()
         except sqlite3.Error as sql_err:
@@ -94,6 +94,7 @@ class FDataBase:
         return True
 
     def get_user(self, user_id):
+        '''Метод получает данные пользователя из БД по его id'''
         try:
             self.__cur.execute(f"SELECT * FROM users WHERE id = {user_id} LIMIT 1")
             res = self.__cur.fetchone()

@@ -6,6 +6,7 @@
         "appcontext",
         "Gunicorn",
         "remainme",
+        "userava",
         "wsgi"
     ],
     "python.linting.pylintEnabled": true,

@@ -1,16 +1,18 @@
 '''Главный модуль приложения
 '''
 # TODO улучшение авторизации https://youtu.be/L_o0wRaZJdg?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
+#TODO Загрузка файла на сервер и сохранение его в БД https://www.youtube.com/watch?v=ICKN_R0wGiI&list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn&index=17&ab_channel=selfedu
 import sqlite3
 import os
 from flask import Flask, render_template, url_for, request,\
-                    flash, redirect, session, abort, g
+                    flash, redirect, session, abort, g, make_response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import config # Импортируем настройки из отдельного файла
 from f_data_base import FDataBase
 from UserLogin import UserLogin
 
+MAX_CONTENT_LENGTH = 1024 * 1024
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -114,8 +116,7 @@ def logout():
 @login_required
 def profile():
     '''Обработчик для страницы профайла пользователя'''
-    return f"""<h2><a href="{url_for('logout')}">Выйти из профиля</a></h2>
-            <p>Информация о пользователе. ID:{current_user.get_id()}</p>"""
+    return render_template('profile.html', menu=d_base.get_menu(), title='Профиль пользователя')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -153,18 +154,24 @@ def register():
     return render_template('register.html', title='Регистрация', menu=d_base.get_menu())
 
 
+@app.route('/userava')
+@login_required
+def userava():
+    '''Обработчик возвращает аватарку пользователя'''
+    img = current_user.get_avatar(app)
+    if not img:
+        return ""
+    h = make_response(img)
+    h.headers['Content-Type'] = 'image/png'
+    return h
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     '''Обработчик ошибки открытия несуществующей страницы'''
     return render_template('page404.html', title='Страница не найдена',
                                             menu=d_base.get_menu()), 404
 
-
-#Тестовый контекст для проверки
-# with app.test_request_context():
-#     print(url_for('index'))
-#     print(url_for('about'))
-#     print(url_for('contact'))
 
 
 if __name__ == '__main__':

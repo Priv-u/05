@@ -1,6 +1,8 @@
 '''Модуль описывает класс для работы с авторизаций пользователей'''
+from flask import url_for
+from flask_login import UserMixin
 
-class UserLogin():
+class UserLogin(UserMixin):
     '''Класс описывающий работу с авторизацией пользователей'''
     def fromDB(self, user_id, db):
         '''Метод получает данные о пользователе из базы данных'''
@@ -12,18 +14,27 @@ class UserLogin():
         self.__user = user
         return self
 
-    def is_authenticated(self):
-        '''Метод проверяет авторизован ли пользователь'''
-        return True
-
-    def is_active(self):
-        '''Метод проверяет активен ли пользователь'''
-        return True
-
-    def is_anonymous(self):
-        '''Метод проверяет использует ли пользователь анонимный вход'''
-        return False
-
     def get_id(self):
         '''Метод возвращает строковое значение id пользователя'''
         return str(self.__user['id'])
+
+    def get_name(self):
+        '''Метод возвращает имя пользователя'''
+        return self.__user['name'] if self.__user else "Без имени"
+
+    def get_email(self):
+        '''Метод возвращает email пользователя'''
+        return self.__user['email'] if self.__user else "Без email"
+
+    def get_avatar(self, app):
+        '''Метод возвращает аватарку пользователя'''
+        img = None
+        if not self.__user['avatar']:
+            try:
+                with app.open_resource(app.root_path + url_for('static', filename='images/default.png'), "rb") as f:
+                    img = f.read()
+            except FileNotFoundError as error:
+                print('Не найден аватар по умолчанию' + str(error))
+        else:
+            img = self.__user['avatar']
+        return img

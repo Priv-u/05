@@ -1,24 +1,25 @@
 '''Главный модуль приложения
 '''
-#улучшение авторизации https://youtu.be/L_o0wRaZJdg?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
-#Загрузка файла на сервер и сохранение его в БД https://www.youtube.com/watch?v=ICKN_R0wGiI&list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn&index=17&ab_channel=selfedu
-#TODO Применение WTForms для работы с формами сайта https://youtu.be/oba6GGprvKc?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
+# улучшение авторизации https://youtu.be/L_o0wRaZJdg?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
+# Загрузка файла на сервер и сохранение его в БД https://www.youtube.com/watch?v=ICKN_R0wGiI&list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn&index=17&ab_channel=selfedu
+# Применение WTForms для работы с формами сайта https://youtu.be/oba6GGprvKc?list=PLA0M1Bcd0w8yrxtwgqBvT6OM4HkOU3xYn
 import sqlite3
 import os
 from flask import Flask, render_template, url_for, request,\
                     flash, redirect, session, abort, g, make_response
-from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from flask_login import LoginManager, login_user, login_required,\
+                    current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import config # Импортируем настройки из отдельного файла
 from f_data_base import FDataBase
 from UserLogin import UserLogin
+from forms import LoginForm
 
 MAX_CONTENT_LENGTH = 1024 * 1024
 
 app = Flask(__name__)
 app.config.from_object(config)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'site.db')))
-
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -30,7 +31,8 @@ login_manager.login_message_category = 'success'
 def load_user(user_id):
     '''функция получает данные о пользователе по его id в базе данных'''
     print("load_user")
-    return UserLogin().fromDB(user_id, d_base)
+    return UserLogin().from_db(user_id, d_base)
+
 
 def connect_db():
     '''функция создает соединение с базой данных'''
@@ -40,7 +42,7 @@ def connect_db():
 
 
 def create_db():
-    '''Функция создает базу данных'''
+    '''Функция создает базу данных и таблицы в ней'''
     data_base = connect_db()
     with app.open_resource('sq_db.sql', mode='r') as f_sql:
         data_base.cursor().executescript(f_sql.read())
@@ -78,6 +80,7 @@ def close_db(error):
 def index():
     '''Обработчик главной страницы'''
     return render_template('index.html', menu=d_base.get_menu(), posts = d_base.get_post_anons())
+
 
 @app.route('/add_post', methods=['POST', 'GET'])
 @login_required
@@ -122,20 +125,24 @@ def profile():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    '''Обработчик формы Логин'''
+    '''Обработчик формы Логин на базе flask-wtforms'''
     if current_user.is_authenticated:
         return redirect(url_for('profile'))
-    if request.method == "POST":
-        user = d_base.get_user_by_email(request.form['email'])
-        if user and check_password_hash(user['psw'], request.form['psw']):
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = d_base.get_user_by_email(form.email.data)
+        if user and check_password_hash(user['psw'], form.psw.data):
             user_login = UserLogin().create(user)
-            remember_me = True if request.form.get('remainme') else False
+            remember_me = form.remember_me.data
             login_user(user_login, remember = remember_me)
             return redirect(request.args.get('next') or url_for('profile'))
         flash("Неверная пара логин/пароль", "error")
-    return render_template('login.html', title='Авторизация', menu=d_base.get_menu())
+
+    return render_template('login.html', title='Авторизация', menu=d_base.get_menu(), form=form)
 
 
+# TODO переписать обработчик с использованием WTForms по аналогии с логином
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     '''Обработчик формы регистрации пользователя'''
@@ -167,13 +174,12 @@ def userava():
     return h
 
 
-@app.route('/apload', methods=["POST", "GET"])
+@app.route('/upload', methods=["POST", "GET"])
 @login_required
 def upload():
     '''Функция выполняет загрузку аватара в БД для текущего пользователя'''
     if request.method == 'POST':
         file = request.files['file']
-        # TODO Дописать метод update_user_avatar
         if file and current_user.verify_ext(file.filename):
             try:
                 img = file.read()

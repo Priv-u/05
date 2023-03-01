@@ -4,7 +4,7 @@ from flask_login import UserMixin
 
 class UserLogin(UserMixin):
     '''Класс описывающий работу с авторизацией пользователей'''
-    def fromDB(self, user_id, db):
+    def from_db(self, user_id, db):
         '''Метод получает данные о пользователе из базы данных'''
         self.__user = db.get_user(user_id)
         return self
@@ -31,7 +31,9 @@ class UserLogin(UserMixin):
         img = None
         if not self.__user['avatar']:
             try:
-                with app.open_resource(app.root_path + url_for('static', filename='images/default.png'), "rb") as f:
+                with app.open_resource(app.root_path +
+                url_for('static', filename='images/default.png'),
+                "rb") as f:
                     img = f.read()
             except FileNotFoundError as error:
                 print('Не найден аватар по умолчанию' + str(error))

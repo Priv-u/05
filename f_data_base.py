@@ -20,9 +20,9 @@ class FDataBase:
         sql = '''SELECT * FROM mainmenu'''
         try:
             self.__cur.execute(sql)
-            res = self.__cur.fetchall()
-            if res:
-                return res
+            result = self.__cur.fetchall()
+            if result:
+                return result
         except sqlite3.Error as sql_error:
             print(f"Ошибка чтения из БД: {sql_error}")
         return []
@@ -61,7 +61,7 @@ class FDataBase:
                 return res
 
         except sqlite3.Error as sql_error:
-            print('Ошибка получения статьи из БД '+str(sql_error))
+            print(f"Ошибка получения статьи из БД: {str(sql_error)}")
         return (False, False)
 
 
@@ -73,7 +73,8 @@ class FDataBase:
             if res:
                 return res
         except sqlite3.Error as sql_error:
-            print('Ошибка получения статьи из БД '+str(sql_error))
+            print(f"Ошибка получения статьи из БД: {str(sql_error)}")
+            # print('Ошибка получения статьи из БД '+str(sql_error))
         return []
 
     def add_user(self, name, email, psw):
@@ -126,7 +127,7 @@ class FDataBase:
         try:
             binary = sqlite3.Binary(avatar)
             # self.__cur.execute(f"UPDATE users SET avatar = {binary} WHERE id = {user_id}")
-            self.__cur.execute(f"UPDATE users SET avatar = ? WHERE id = ?", (binary, user_id))
+            self.__cur.execute("UPDATE users SET avatar = ? WHERE id = ?", (binary, user_id))
             self.__db.commit()
         except sqlite3.Error as sql_error:
             print(f"Ошибка обновления аватара пользователя в БД: {sql_error}")

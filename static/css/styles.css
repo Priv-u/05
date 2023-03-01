@@ -48,7 +48,6 @@ div.content {
 }
 
 .form-contact label {
-    font-family: 'Helvetica';
     display: inline-block;
     min-width: 80px;
 }
@@ -62,17 +61,28 @@ textarea {
     font-size: 16px;
 }
 
+.form-contact .invalid {
+    display: inline-block;
+    background: #FF9898;
+}
+
+.form-contact .invalid-feedback {
+    color: #CC0000;
+}
+
 .flash {
     padding: 10px;
 }
 
 .flash.success {
     border: 1px solid #21DB56;
+    border-radius: 5px;
     background: #AEFFC5;
 }
 
 .flash.error {
     border: 1px solid #FF4343;
+    border-radius: 5px;
     background: #FF9c9c;
 }
 
